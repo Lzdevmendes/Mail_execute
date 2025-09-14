@@ -4,6 +4,7 @@ import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import List, Optional
+from datetime import datetime
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Request, Depends
@@ -18,9 +19,10 @@ from .models.email_models import (
     EmailClassificationRequest,
     EmailClassificationResponse,
     EmailProcessingMetrics,
-    HealthCheckResponse,
+    HealthResponse,
     ErrorResponse,
     FileUploadResponse,
+    EmailCategory,
     EmailSource
 )
 from .services.email_classifier import email_classifier
@@ -182,13 +184,15 @@ async def read_root(request: Request):
         """)
 
 
-@app.get("/health", response_model=HealthCheckResponse, tags=["Health"])
+@app.get("/health", response_model=HealthResponse, tags=["Health"])
 async def health_check():
     """Check application health status."""
-    return HealthCheckResponse(
+    return HealthResponse(
         status="healthy",
+        timestamp=datetime.now(),
         version=settings.APP_VERSION,
-        ai_model_loaded=email_classifier.is_model_loaded
+        ai_model_loaded=email_classifier.is_model_loaded,
+        uptime=0.0
     )
 
 

@@ -1,0 +1,20 @@
+2025-09-14 20:25:01 | INFO | backend.app.main:lifespan:36 - Starting Email Classification System...
+2025-09-14 20:25:01 | INFO | backend.app.services.email_classifier:initialize_model:81 - Initializing AI model for email classification...
+2025-09-14 20:25:20 | INFO | backend.app.services.email_classifier:initialize_model:105 - AI model initialized successfully
+2025-09-14 20:25:20 | INFO | backend.app.main:lifespan:41 - Application startup completed successfully
+2025-09-14 20:25:33 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/
+2025-09-14 20:25:33 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.004s)
+2025-09-14 20:25:34 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/favicon.ico
+2025-09-14 20:25:34 | INFO | backend.app.main:log_requests:142 - Response: 404 (0.001s)
+2025-09-14 20:25:50 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/
+2025-09-14 20:25:50 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:25:56 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/.well-known/appspecific/com.chrome.devtools.json
+2025-09-14 20:25:56 | INFO | backend.app.main:log_requests:142 - Response: 404 (0.001s)
+2025-09-14 20:29:17 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/
+2025-09-14 20:29:17 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:29:17 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/.well-known/appspecific/com.chrome.devtools.json
+2025-09-14 20:29:17 | INFO | backend.app.main:log_requests:142 - Response: 404 (0.001s)
+2025-09-14 20:29:27 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/docs
+2025-09-14 20:29:27 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:29:28 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/openapi.json
+2025-09-14 20:29:28 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.022s)

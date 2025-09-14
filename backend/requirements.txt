@@ -4,7 +4,7 @@ uvicorn[standard]==0.24.0
 
 # AI and NLP
 transformers==4.35.2
-torch==2.1.1
+torch==2.8.0
 tokenizers==0.15.0
 sentencepiece==0.1.99
 nltk==3.8.1

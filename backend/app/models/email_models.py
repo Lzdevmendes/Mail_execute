@@ -10,10 +10,18 @@ class EmailCategory(str, Enum):
     UNPRODUCTIVE = "improdutivo"
 
 
+class EmailSource(str, Enum):
+    """Email source types"""
+    TEXT_INPUT = "text_input"
+    TXT_FILE = "txt_file"
+    PDF_FILE = "pdf_file"
+    API = "api"
+
+
 class EmailClassificationRequest(BaseModel):
     """Request model for email classification"""
     content: str = Field(..., min_length=10, max_length=10000, description="Email content to classify")
-    source: str = Field(default="api", description="Source of the request")
+    source: EmailSource = Field(default=EmailSource.API, description="Source of the request")
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="Additional metadata")
 
 
