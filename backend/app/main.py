@@ -39,11 +39,9 @@ async def lifespan(app: FastAPI):
         logger.info("Application startup completed successfully")
     except Exception as e:
         logger.error(f"Failed to initialize application: {str(e)}")
-        # Continue without AI model - will fall back to rule-based classification
     
     yield
     
-    # Shutdown
     logger.info("Shutting down Email Classification System...")
 
 
