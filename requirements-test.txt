@@ -1,0 +1,16 @@
+# Minimal dependencies for basic testing
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+python-dotenv
+jinja2
+python-multipart
+PyPDF2
+requests
+httpx
+loguru
+nltk
+pytest
+pytest-asyncio
+aiofiles
