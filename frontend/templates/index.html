@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Classificação de Emails</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/static/css/style.css" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📧</text></svg>">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Processando...</span>
+            </div>
+            <p class="mt-3 text-primary">Classificando email...</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-envelope-open-text me-2"></i>
+                Sistema de Classificação de Emails
+            </a>
+            <span class="navbar-text">
+                <small class="text-light opacity-75">Sistema de Classificação</small>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- Header Section -->
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 fw-bold text-primary mb-3">
+                    <i class="fas fa-envelope-open-text text-success me-2"></i>
+                    Classificação de Emails
+                </h1>
+                <p class="lead text-muted mb-4">
+                    Sistema automatizado para classificar emails como 
+                    <strong class="text-success">Produtivos</strong> ou <strong class="text-warning">Improdutivos</strong> 
+                    e gerar respostas apropriadas.
+                </p>
+                
+                <!-- Status Badge -->
+                <div class="status-container mb-4">
+                    <span id="statusBadge" class="badge bg-secondary">
+                        <i class="fas fa-circle-notch fa-spin me-1"></i>
+                        Verificando status...
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Methods Tabs -->
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-light border-0">
+                        <ul class="nav nav-tabs card-header-tabs" id="inputTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="text-tab" data-bs-toggle="tab" 
+                                        data-bs-target="#text-panel" type="button" role="tab">
+                                    <i class="fas fa-keyboard me-2"></i>
+                                    Texto Direto
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="file-tab" data-bs-toggle="tab" 
+                                        data-bs-target="#file-panel" type="button" role="tab">
+                                    <i class="fas fa-file-upload me-2"></i>
+                                    Upload de Arquivo
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="tab-content" id="inputTabContent">
+                            <!-- Text Input Panel -->
+                            <div class="tab-pane fade show active" id="text-panel" role="tabpanel">
+                                <form id="textClassificationForm">
+                                    <div class="mb-4">
+                                        <label for="emailContent" class="form-label fw-semibold">
+                                            <i class="fas fa-edit me-1"></i>
+                                            Conteúdo do Email
+                                        </label>
+                                        <textarea 
+                                            class="form-control" 
+                                            id="emailContent" 
+                                            rows="8" 
+                                            placeholder="Cole aqui o conteúdo do email que você deseja classificar...&#10;&#10;Exemplo:&#10;Prezados,&#10;&#10;Estou com um problema no sistema e preciso de ajuda urgente. O módulo de relatórios não está funcionando e tenho uma apresentação amanhã.&#10;&#10;Poderiam me auxiliar?&#10;&#10;Obrigado."
+                                            required></textarea>
+                                        <div class="form-text">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Mínimo de 10 caracteres, máximo de 10.000 caracteres
+                                        </div>
+                                        <div class="character-counter mt-1">
+                                            <small class="text-muted">
+                                                <span id="charCount">0</span> / 10.000 caracteres
+                                            </small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-cogs me-2"></i>
+                                            Classificar Email
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <!-- File Upload Panel -->
+                            <div class="tab-pane fade" id="file-panel" role="tabpanel">
+                                <form id="fileClassificationForm" enctype="multipart/form-data">
+                                    <div class="mb-4">
+                                        <label for="emailFile" class="form-label fw-semibold">
+                                            <i class="fas fa-file-alt me-1"></i>
+                                            Arquivo do Email
+                                        </label>
+                                        
+                                        <!-- File Drop Zone -->
+                                        <div class="file-drop-zone" id="fileDropZone">
+                                            <input type="file" class="form-control" id="emailFile" 
+                                                   accept=".txt,.pdf" required style="display: none;">
+                                            <div class="drop-zone-content">
+                                                <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                                <h5 class="text-muted">Arraste e solte seu arquivo aqui</h5>
+                                                <p class="text-muted">ou</p>
+                                                <button type="button" class="btn btn-outline-primary" id="browseFileBtn">
+                                                    <i class="fas fa-folder-open me-2"></i>
+                                                    Selecionar Arquivo
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- File Info -->
+                                        <div id="fileInfo" class="file-info mt-3" style="display: none;">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-file text-primary me-2"></i>
+                                                <div class="flex-grow-1">
+                                                    <div class="fw-semibold" id="fileName"></div>
+                                                    <small class="text-muted" id="fileSize"></small>
+                                                </div>
+                                                <button type="button" class="btn btn-sm btn-outline-danger" id="removeFile">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-text">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Formatos aceitos: .txt, .pdf (máximo 10MB)
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-success btn-lg">
+                                            <i class="fas fa-upload me-2"></i>
+                                            Enviar e Classificar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="row mt-5" style="display: none;">
+            <div class="col-lg-10 mx-auto">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-light border-0">
+                        <h4 class="mb-0">
+                            <i class="fas fa-chart-line me-2 text-primary"></i>
+                            Resultado da Classificação
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Classification Result -->
+                        <div id="classificationResult" class="mb-4">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="classification-icon me-3">
+                                            <i id="categoryIcon" class="fas fa-circle fa-2x"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-1">Categoria</h5>
+                                            <h3 id="categoryText" class="mb-0 fw-bold"></h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="confidence-meter">
+                                        <h5 class="mb-2">Confiança</h5>
+                                        <div class="progress mb-2" style="height: 10px;">
+                                            <div id="confidenceBar" class="progress-bar" role="progressbar"></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small class="text-muted">0%</small>
+                                            <span id="confidenceText" class="fw-semibold"></span>
+                                            <small class="text-muted">100%</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Suggested Response -->
+                        <div class="suggested-response">
+                            <h5 class="mb-3">
+                                <i class="fas fa-reply me-2"></i>
+                                Resposta Sugerida
+                            </h5>
+                            <div class="response-box">
+                                <div class="bg-light border rounded p-3">
+                                    <p id="suggestedResponseText" class="mb-0"></p>
+                                </div>
+                                <div class="mt-2">
+                                    <button id="copyResponseBtn" class="btn btn-sm btn-outline-primary me-2">
+                                        <i class="fas fa-copy me-1"></i>
+                                        Copiar Resposta
+                                    </button>
+                                    <button id="editResponseBtn" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-edit me-1"></i>
+                                        Editar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Processing Info -->
+                        <div class="processing-info mt-4 pt-3 border-top">
+                            <div class="row text-center">
+                                <div class="col-md-4">
+                                    <div class="metric">
+                                        <i class="fas fa-clock text-info"></i>
+                                        <div class="mt-1">
+                                            <small class="text-muted">Tempo de Processamento</small>
+                                            <div id="processingTime" class="fw-semibold"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="metric">
+                                        <i class="fas fa-calendar text-success"></i>
+                                        <div class="mt-1">
+                                            <small class="text-muted">Data/Hora</small>
+                                            <div id="timestamp" class="fw-semibold"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="metric">
+                                        <i class="fas fa-robot text-warning"></i>
+                                        <div class="mt-1">
+                                            <small class="text-muted">Modelo IA</small>
+                                            <div class="fw-semibold">Transformers</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons mt-4 text-center">
+                            <button id="newClassificationBtn" class="btn btn-primary me-2">
+                                <i class="fas fa-plus me-1"></i>
+                                Nova Classificação
+                            </button>
+                            <button id="downloadResultBtn" class="btn btn-outline-secondary">
+                                <i class="fas fa-download me-1"></i>
+                                Baixar Resultado
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="row mt-5">
+            <div class="col-lg-10 mx-auto">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-light border-0">
+                        <h4 class="mb-0">
+                            <i class="fas fa-chart-bar me-2 text-primary"></i>
+                            Estatísticas do Sistema
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="metricsContainer">
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <div class="metric-card">
+                                        <i class="fas fa-envelope fa-2x text-primary mb-2"></i>
+                                        <h3 id="totalProcessed" class="fw-bold text-primary">-</h3>
+                                        <p class="text-muted mb-0">Total Processados</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="metric-card">
+                                        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                                        <h3 id="productiveCount" class="fw-bold text-success">-</h3>
+                                        <p class="text-muted mb-0">Produtivos</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="metric-card">
+                                        <i class="fas fa-info-circle fa-2x text-warning mb-2"></i>
+                                        <h3 id="unproductiveCount" class="fw-bold text-warning">-</h3>
+                                        <p class="text-muted mb-0">Improdutivos</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="metric-card">
+                                        <i class="fas fa-tachometer-alt fa-2x text-info mb-2"></i>
+                                        <h3 id="averageTime" class="fw-bold text-info">-</h3>
+                                        <p class="text-muted mb-0">Tempo Médio</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example Emails Section -->
+        <div class="row mt-5">
+            <div class="col-lg-10 mx-auto">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-light border-0">
+                        <h4 class="mb-0">
+                            <i class="fas fa-lightbulb me-2 text-primary"></i>
+                            Exemplos de Emails
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="example-card border rounded p-3 h-100">
+                                    <h6 class="fw-semibold text-success">
+                                        <i class="fas fa-briefcase me-1"></i>
+                                        Email Produtivo
+                                    </h6>
+                                    <p class="text-muted small mb-3">
+                                        "Prezados, estou com dificuldades para acessar o sistema. Preciso urgentemente dos relatórios para a reunião de amanhã. Podem me ajudar?"
+                                    </p>
+                                    <button class="btn btn-sm btn-outline-success use-example" 
+                                            data-content="Prezados,&#10;&#10;Estou com dificuldades para acessar o sistema de relatórios. Preciso urgentemente dos dados de vendas do último trimestre para a reunião de amanhã às 9h.&#10;&#10;Podem me ajudar a resolver este problema?&#10;&#10;Obrigado,&#10;João Silva">
+                                        <i class="fas fa-arrow-right me-1"></i>
+                                        Usar Este Exemplo
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="example-card border rounded p-3 h-100">
+                                    <h6 class="fw-semibold text-warning">
+                                        <i class="fas fa-heart me-1"></i>
+                                        Email Improdutivo
+                                    </h6>
+                                    <p class="text-muted small mb-3">
+                                        "Oi pessoal! Espero que todos estejam bem. Queria agradecer pela festa de ontem, foi incrível! Abraços para todos."
+                                    </p>
+                                    <button class="btn btn-sm btn-outline-warning use-example" 
+                                            data-content="Oi pessoal!&#10;&#10;Espero que todos estejam bem e tenham tido um ótimo final de semana. Queria agradecer pela festa de aniversário de ontem, foi incrível!&#10;&#10;Muito obrigado por tudo, abraços para todos!&#10;&#10;Maria">
+                                        <i class="fas fa-arrow-right me-1"></i>
+                                        Usar Este Exemplo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="fw-semibold">Sistema de Classificação de Emails</h6>
+                    <p class="text-muted small mb-0">
+                        Sistema para classificação automática de emails.<br>
+                        Interface web responsiva e API REST.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h6 class="fw-semibold">Tecnologias</h6>
+                    <p class="text-muted small mb-0">
+                        Python • FastAPI • Transformers • NLTK<br>
+                        Bootstrap • JavaScript • HTML5 • CSS3
+                    </p>
+                </div>
+            </div>
+            <hr class="my-3 opacity-25">
+            <div class="text-center">
+                <small class="text-muted">
+                    © 2024 Sistema de Classificação de Emails
+                </small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="successToast" class="toast bg-success text-white" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span id="successToastMessage"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" 
+                        data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+        
+        <div id="errorToast" class="toast bg-danger text-white" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span id="errorToastMessage"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" 
+                        data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom JS -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
