@@ -1,0 +1,129 @@
+==== EMAIL PRODUTIVO 1 ====
+Assunto: Problema urgente no sistema
+De: joao.silva@empresa.com
+Para: suporte@empresa.com
+
+Prezados,
+
+Estou com um problema crítico no sistema de vendas. O módulo de relatórios não está funcionando e tenho uma apresentação importante para clientes amanhã às 9h.
+
+O erro que aparece é: "Connection timeout error 500". Já tentei reiniciar o browser e limpar o cache, mas o problema persiste.
+
+Preciso urgentemente de ajuda para resolver esta questão. É possível alguém me auxiliar hoje ainda?
+
+Obrigado,
+João Silva
+Gerente de Vendas
+
+==== EMAIL PRODUTIVO 2 ====
+Assunto: Solicitação de acesso ao sistema
+De: maria.santos@empresa.com
+Para: ti@empresa.com
+
+Boa tarde,
+
+Preciso de acesso ao sistema financeiro para completar o relatório mensal. Meu usuário foi bloqueado ontem após algumas tentativas de login.
+
+Podem desbloquear minha conta? Meu ID de usuário é: m.santos01
+
+Aguardo retorno.
+
+Atenciosamente,
+Maria Santos
+Analista Financeiro
+
+==== EMAIL PRODUTIVO 3 ====
+Assunto: Atualização sobre projeto
+De: carlos.lima@empresa.com
+Para: equipe@empresa.com
+
+Pessoal,
+
+Preciso de uma atualização sobre o andamento do projeto X. Temos reunião com o cliente na sexta-feira e preciso apresentar o status atual.
+
+Poderiam me enviar:
+- Relatório de progresso
+- Lista de pendências
+- Cronograma atualizado
+
+Prazo: até quinta-feira às 17h.
+
+Obrigado,
+Carlos Lima
+Gerente de Projeto
+
+==== EMAIL IMPRODUTIVO 1 ====
+Assunto: Parabéns pela promoção!
+De: ana.costa@empresa.com
+Para: pedro.oliveira@empresa.com
+
+Oi Pedro!
+
+Soube da sua promoção e queria te parabenizar! Você merece muito, sempre foi dedicado e competente.
+
+Vamos comemorar no happy hour da sexta-feira?
+
+Parabéns novamente!
+
+Abraços,
+Ana Costa
+
+==== EMAIL IMPRODUTIVO 2 ====
+Assunto: Bom dia equipe!
+De: patricia.alves@empresa.com
+Para: equipe@empresa.com
+
+Bom dia pessoal!
+
+Espero que todos estejam bem nesta segunda-feira. Que a semana seja produtiva e cheia de conquistas para todos nós!
+
+Desejo um ótimo dia para toda a equipe.
+
+Abraços,
+Patrícia Alves
+
+==== EMAIL IMPRODUTIVO 3 ====
+Assunto: Obrigado pelo aniversário
+De: ricardo.ferreira@empresa.com
+Para: todos@empresa.com
+
+Pessoal,
+
+Muito obrigado pelas mensagens de aniversário e pelos parabéns. Foi muito legal receber o carinho de todos vocês.
+
+A festinha de ontem foi ótima, obrigado a todos que participaram!
+
+Abraços carinhosos,
+Ricardo Ferreira
+
+==== EMAIL PRODUTIVO 4 ====
+Assunto: Problema com impressora
+De: lucia.ribeiro@empresa.com
+Para: suporte@empresa.com
+
+Olá,
+
+A impressora da sala 204 não está funcionando. Quando tento imprimir, aparece a mensagem "Papel atolado", mas não há papel atolado.
+
+Já verifiquei os cartuchos e estão com tinta. Poderiam verificar o que pode estar acontecendo?
+
+Preciso imprimir documentos importantes hoje.
+
+Obrigada,
+Lúcia Ribeiro
+Assistente Administrativa
+
+==== EMAIL IMPRODUTIVO 4 ====
+Assunto: Feliz Ano Novo!
+De: marcos.pereira@empresa.com
+Para: todos@empresa.com
+
+Queridos colegas,
+
+Desejo a todos um Feliz Ano Novo repleto de saúde, alegria e realizações pessoais e profissionais.
+
+Que 2024 seja um ano de muitos sucessos para nossa equipe e empresa.
+
+Um abraço afetuoso a todos,
+Marcos Pereira
+Diretor Administrativo

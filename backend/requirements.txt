@@ -1,0 +1,42 @@
+# Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# AI and NLP
+transformers==4.35.2
+torch==2.1.1
+tokenizers==0.15.0
+sentencepiece==0.1.99
+nltk==3.8.1
+
+# File Processing
+PyPDF2==3.0.1
+python-multipart==0.0.6
+
+# HTTP and API
+httpx==0.25.2
+requests==2.31.0
+
+# Template Engine
+jinja2==3.1.2
+
+# Environment and Config
+python-dotenv==1.0.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Development and Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+
+# CORS and Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Monitoring and Logging
+loguru==0.7.2
+
+# Utils
+aiofiles==23.2.1
+python-dateutil==2.8.2
