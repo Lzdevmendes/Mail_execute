@@ -210,7 +210,7 @@ async def classify_email_text(request: EmailClassificationRequest):
         
         result = await email_classifier.classify_email(request)
         
-        logger.info(f"Text classification completed: {result.category.value} (confidence: {result.confidence:.3f})")
+        logger.info(f"Text classification completed: {result.category} (confidence: {result.confidence:.3f})")
         
         return result
         
@@ -264,7 +264,7 @@ async def classify_email_file(file: UploadFile = File(...)):
         # Classify the content
         result = await email_classifier.classify_email(classification_request)
         
-        logger.info(f"File classification completed: {result.category.value} (confidence: {result.confidence:.3f})")
+        logger.info(f"File classification completed: {result.category} (confidence: {result.confidence:.3f})")
         
         return result
         

@@ -250,7 +250,7 @@ class EmailClassifier:
             self._update_metrics(category, processing_time, confidence)
             
             response = EmailClassificationResponse(
-                category=category,
+                category=category.value,
                 confidence=confidence,
                 suggested_response=suggested_response,
                 processing_time=processing_time,
