@@ -1,36 +1,69 @@
-  echo "# Python
-  __pycache__/
-  *.pyc
-  *.pyo
-  *.pyd
-  .Python
-  pip-log.txt
-  pip-delete-this-directory.txt
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+*.py[cod]
 
-  # Virtual Environment
-  venv/
-  env/
-  ENV/
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
 
-  # IDE
-  .vscode/
-  .idea/
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
-  # Cache
-  .pytest_cache/
-  models_cache/
+# Cache and Models (MUITO IMPORTANTE!)
+.pytest_cache/
+models_cache/
+backend/models_cache/
+*.bin
+*.safetensors
+transformers_cache/
+huggingface_cache/
 
-  # Logs
-  *.log
-  sys.stdout
+# Logs e Output
+*.log
+sys.stdout
+logs/
+*.out
 
-  # Environment
-  .env
+# Environment
+.env
+.env.local
+.env.production
 
-  # Uploads
-  uploads/*
-  !uploads/.gitkeep
+# Uploads e Temp
+uploads/*
+!uploads/.gitkeep
+tmp/
+temp/
 
-  # Data
-  data/*
-  !data/.gitkeep"
+# Data
+data/*
+!data/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build e Dist
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Docker
+.dockerignore
+
+# Railway
+.railway/
