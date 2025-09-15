@@ -815,3 +815,13 @@
 2025-09-15 12:54:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
 2025-09-15 12:55:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/metrics
 2025-09-15 12:55:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 12:56:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/metrics
+2025-09-15 12:56:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 12:57:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/metrics
+2025-09-15 12:57:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 12:58:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/metrics
+2025-09-15 12:58:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 12:59:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/metrics
+2025-09-15 12:59:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 13:00:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/metrics
+2025-09-15 13:00:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)

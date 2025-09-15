@@ -65,5 +65,3 @@ dist/
 # Docker
 .dockerignore
 
-# Railway
-.railway/

@@ -74,7 +74,6 @@ Mail_execute/
 ├── models_cache/             # Cache de modelos NLP
 ├── uploads/                  # Arquivos enviados
 ├── Dockerfile                # Configuração Docker
-├── railway.toml             # Deploy Railway
 ├── start_server.py          # Script de inicialização
 ├── clean_cache.py           # Script de limpeza
 ├── requirements.txt         # Dependências principais
@@ -173,16 +172,50 @@ pip install fastapi uvicorn pydantic nltk transformers
 ### Docker
 O projeto inclui `Dockerfile` otimizado para produção:
 - Multi-stage build para reduzir tamanho da imagem
-- Imagem final < 4GB (otimizada de 7.6GB original)
-- Configuração Railway ready
+- Imagem final < 1GB (otimizada de 7.6GB original)
+- Pronto para deploy em qualquer plataforma
 
-### Railway Deploy
+### Deploy em Produção
+
+#### Opção 1: Docker Compose (Recomendado)
 ```bash
-# Deploy automático via railway.toml
-railway up
+# Criar docker-compose.yml e fazer deploy
+docker-compose up -d
 ```
 
-Veja `RAILWAY_DEPLOY.md` para instruções detalhadas.
+#### Opção 2: Docker Manual
+```bash
+# Build da imagem
+docker build -t mail-execute .
+
+# Run em produção
+docker run -d \
+  -p 8000:8000 \
+  -e ENVIRONMENT=production \
+  -e DEBUG=false \
+  --name mail-execute \
+  mail-execute
+```
+
+#### Opção 3: VPS/Servidor Próprio
+```bash
+# Clone do repositório
+git clone https://github.com/Lzdevmendes/Mail_execute.git
+cd Mail_execute
+
+# Setup do ambiente
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# ou venv\Scripts\activate  # Windows
+
+# Instalação
+pip install -r requirements-production.txt
+
+# Execução em produção
+python start_server.py
+```
+
+**Compatível com**: AWS, Google Cloud, Azure, DigitalOcean, Heroku, VPS próprio, etc.
 
 ## 🛠️ Scripts Utilitários
 
@@ -245,7 +278,7 @@ Execute os testes: `python -m pytest tests/` ou `python tests/test_api.py`
 - ✅ Interface responsiva
 - ✅ API RESTful completa
 - ✅ **Docker otimizado para deploy**
-- ✅ **Railway deployment ready**
+- ✅ **Deploy-ready para qualquer plataforma**
 - ✅ **Scripts de automação**
 - ✅ **Cache de modelos inteligente**
 
