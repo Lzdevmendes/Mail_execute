@@ -23,15 +23,34 @@ python -m app.main
 ### 2. Frontend
 Acesse: `http://localhost:8001` após iniciar o backend
 
-### 3. Testes
+### 3. Docker (Recomendado)
 ```bash
-python test_app.py
+# Build da imagem
+docker build -t mail-execute .
+
+# Executar container
+docker run -p 8000:8000 mail-execute
+```
+
+### 4. Script de Inicialização
+```bash
+# Usar script personalizado
+python start_server.py
+```
+
+### 5. Testes
+```bash
+# Testes completos
+python -m pytest tests/
+
+# Ou teste individual
+python tests/test_api.py
 ```
 
 ## 📋 Estrutura do Projeto
 
 ```
-Project_Mailexecute/
+Mail_execute/
 ├── backend/
 │   ├── app/
 │   │   ├── services/          # Lógica de negócio
@@ -48,7 +67,18 @@ Project_Mailexecute/
 │   ├── templates/index.html   # Interface web
 │   ├── static/css/style.css   # Estilos
 │   └── static/js/app.js       # JavaScript
-├── test_app.py               # Testes automatizados
+├── tests/
+│   └── test_api.py           # Testes automatizados
+├── data/
+│   └── sample_emails.txt     # Emails de exemplo
+├── models_cache/             # Cache de modelos NLP
+├── uploads/                  # Arquivos enviados
+├── Dockerfile                # Configuração Docker
+├── railway.toml             # Deploy Railway
+├── start_server.py          # Script de inicialização
+├── clean_cache.py           # Script de limpeza
+├── requirements.txt         # Dependências principais
+├── requirements-test.txt    # Dependências de teste
 └── README.md
 ```
 
@@ -138,6 +168,36 @@ pip install fastapi uvicorn pydantic nltk transformers
 - `GET /metrics` - Métricas de uso
 - `GET /` - Interface web
 
+## 🐳 Deploy e Containerização
+
+### Docker
+O projeto inclui `Dockerfile` otimizado para produção:
+- Multi-stage build para reduzir tamanho da imagem
+- Imagem final < 4GB (otimizada de 7.6GB original)
+- Configuração Railway ready
+
+### Railway Deploy
+```bash
+# Deploy automático via railway.toml
+railway up
+```
+
+Veja `RAILWAY_DEPLOY.md` para instruções detalhadas.
+
+## 🛠️ Scripts Utilitários
+
+### start_server.py
+Script personalizado de inicialização com configurações otimizadas:
+```bash
+python start_server.py
+```
+
+### clean_cache.py
+Limpeza automática de cache de modelos e arquivos temporários:
+```bash
+python clean_cache.py
+```
+
 ## 🧪 Testes e Validação
 
 O projeto inclui testes automatizados que validam:
@@ -147,7 +207,7 @@ O projeto inclui testes automatizados que validam:
 - ✅ Modelos Pydantic
 - ✅ Endpoints da API
 
-Execute os testes: `python test_app.py`
+Execute os testes: `python -m pytest tests/` ou `python tests/test_api.py`
 
 ## 🎯 Pontos Técnicos para Entrevista
 
@@ -184,7 +244,11 @@ Execute os testes: `python test_app.py`
 - ✅ Performance otimizada
 - ✅ Interface responsiva
 - ✅ API RESTful completa
+- ✅ **Docker otimizado para deploy**
+- ✅ **Railway deployment ready**
+- ✅ **Scripts de automação**
+- ✅ **Cache de modelos inteligente**
 
 ---
 
-**Desenvolvido para demonstrar competências em Python, FastAPI, NLP, Frontend e Arquitetura de Software.**
+**Desenvolvido por Lzmendes para demonstrar competências em Python, FastAPI, NLP, Frontend e Arquitetura de Software.**
