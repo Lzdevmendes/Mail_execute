@@ -12,8 +12,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar requirements e instalar em diretório separado
-COPY requirements.txt .
+# Copiar requirements otimizado para produção e instalar
+COPY requirements-production.txt ./requirements.txt
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 # Stage final - imagem limpa
