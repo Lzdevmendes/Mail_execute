@@ -512,3 +512,65 @@
 2025-09-15 10:56:09 | INFO | backend.app.main:lifespan:47 - Shutting down Email Classification System...
 2025-09-15 10:56:21 | INFO | backend.app.main:lifespan:36 - Starting Email Classification System...
 2025-09-15 10:56:21 | INFO | backend.app.services.email_classifier:initialize_model:81 - Initializing AI model for email classification...
+2025-09-15 10:58:11 | INFO | backend.app.services.email_classifier:initialize_model:105 - AI model initialized successfully
+2025-09-15 10:58:11 | INFO | backend.app.main:lifespan:41 - Application startup completed successfully
+2025-09-15 10:58:11 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 10:58:11 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 10:58:11 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 10:58:11 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.002s)
+2025-09-15 10:58:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 10:58:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 10:59:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 10:59:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:00:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:00:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:01:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:01:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:02:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:02:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.002s)
+2025-09-15 11:03:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:03:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:04:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:04:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:05:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:05:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:06:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:06:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:07:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:07:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:08:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:08:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:09:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:09:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:10:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:10:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:11:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:11:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:12:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:12:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:13:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:13:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:14:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:14:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:15:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:15:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:16:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:16:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:17:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:17:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:18:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:18:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:19:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:19:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:20:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:20:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.003s)
+2025-09-15 11:21:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:21:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.002s)
+2025-09-15 11:22:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:22:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:23:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:23:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:24:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:24:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-15 11:25:18 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-15 11:25:18 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
