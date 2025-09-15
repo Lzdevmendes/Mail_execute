@@ -26,6 +26,13 @@ class Settings(BaseSettings):
         description="Directory to cache downloaded models"
     )
     MAX_LENGTH: int = Field(default=512, description="Maximum token length for model input")
+
+    # OpenAI Settings
+    OPENAI_API_KEY: Optional[str] = Field(default=None, description="OpenAI API key")
+    OPENAI_MODEL: str = Field(default="gpt-3.5-turbo", description="OpenAI model to use")
+    USE_OPENAI: bool = Field(default=False, description="Enable OpenAI integration")
+    OPENAI_MAX_TOKENS: int = Field(default=150, description="Maximum tokens for OpenAI response")
+    OPENAI_TEMPERATURE: float = Field(default=0.3, description="OpenAI temperature for responses")
     
     MAX_FILE_SIZE: int = Field(default=10 * 1024 * 1024, description="Maximum file size in bytes (10MB)")
     ALLOWED_FILE_EXTENSIONS: List[str] = Field(

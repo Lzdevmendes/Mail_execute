@@ -24,6 +24,7 @@ from ..models.email_models import (
     EmailProcessingMetrics
 )
 from ..utils.nlp_processor import NLPProcessor
+from .openai_service import openai_service
 
 
 class EmailClassifier:
@@ -220,10 +221,44 @@ class EmailClassifier:
         
         try:
             logger.info(f"Starting email classification for content length: {len(request.content)}")
-            
-            # Preprocess the text
+
+            # Try OpenAI classification first if available
+            category = EmailCategory.PRODUCTIVE
+            confidence = 0.6
+            classification_method = "rule-based"
+            suggested_response = ""
+
+            if openai_service.is_available():
+                try:
+                    openai_result = await openai_service.classify_email(request.content)
+                    if openai_result:
+                        category = EmailCategory.PRODUCTIVE if openai_result.get('categoria', '').lower() == 'produtivo' else EmailCategory.UNPRODUCTIVE
+                        confidence = float(openai_result.get('confianca', 0.8))
+                        classification_method = "openai"
+
+                        # Generate response using OpenAI
+                        suggested_response = await openai_service.generate_response(request.content, category.value) or ""
+
+                        logger.info(f"OpenAI classification: {category.value} ({confidence:.2f})")
+
+                        # Skip other methods if OpenAI was successful
+                        processing_time = time.time() - start_time
+                        self._update_metrics(category, processing_time, confidence)
+
+                        return EmailClassificationResponse(
+                            category=category,
+                            confidence=confidence,
+                            suggested_response=suggested_response,
+                            processing_time_ms=processing_time * 1000,
+                            classification_method=classification_method,
+                            features={}
+                        )
+                except Exception as e:
+                    logger.warning(f"OpenAI classification failed, falling back to local methods: {e}")
+
+            # Preprocess the text for local classification
             cleaned_text = self.nlp_processor.clean_text(request.content)
-            
+
             if not cleaned_text:
                 raise ValueError("No meaningful content found after preprocessing")
             

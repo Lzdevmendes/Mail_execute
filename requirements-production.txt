@@ -4,8 +4,12 @@
 fastapi>=0.104.1
 uvicorn[standard]>=0.24.0
 
-# NLP - Lightweight only
+# NLP and AI
 nltk>=3.8.1
+transformers>=4.35.2
+torch>=2.0.0
+tokenizers>=0.15.0
+openai>=1.0.0
 
 # File Processing
 PyPDF2>=3.0.1
