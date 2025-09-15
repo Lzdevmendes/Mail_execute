@@ -115,3 +115,97 @@
 2025-09-14 20:43:49 | INFO | backend.app.services.email_classifier:initialize_model:81 - Initializing AI model for email classification...
 2025-09-14 20:43:52 | INFO | backend.app.services.email_classifier:initialize_model:105 - AI model initialized successfully
 2025-09-14 20:43:52 | INFO | backend.app.main:lifespan:41 - Application startup completed successfully
+2025-09-14 20:44:03 | INFO | backend.app.main:lifespan:36 - Starting Email Classification System...
+2025-09-14 20:44:03 | INFO | backend.app.services.email_classifier:initialize_model:81 - Initializing AI model for email classification...
+2025-09-14 20:44:05 | INFO | backend.app.services.email_classifier:initialize_model:105 - AI model initialized successfully
+2025-09-14 20:44:05 | INFO | backend.app.main:lifespan:41 - Application startup completed successfully
+2025-09-14 20:44:21 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:44:21 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:45:21 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:45:21 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:46:21 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:46:21 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:46:36 | INFO | backend.app.main:log_requests:135 - Request: POST http://localhost:8000/classify/text
+2025-09-14 20:46:36 | INFO | backend.app.main:log_requests:142 - Response: 404 (0.001s)
+2025-09-14 20:47:07 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/health
+2025-09-14 20:47:07 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:47:21 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:47:21 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:47:25 | INFO | backend.app.main:log_requests:135 - Request: POST http://localhost:8000/classify/text
+2025-09-14 20:47:25 | INFO | backend.app.main:log_requests:142 - Response: 404 (0.001s)
+2025-09-14 20:47:48 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/docs
+2025-09-14 20:47:48 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:47:59 | INFO | backend.app.main:log_requests:135 - Request: GET http://localhost:8000/openapi.json
+2025-09-14 20:47:59 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.012s)
+2025-09-14 20:48:21 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:48:21 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:48:31 | INFO | backend.app.main:log_requests:135 - Request: POST http://localhost:8000/classify
+2025-09-14 20:48:31 | INFO | backend.app.main:log_requests:142 - Response: 400 (0.001s)
+2025-09-14 20:48:41 | INFO | backend.app.main:log_requests:135 - Request: POST http://localhost:8000/classify
+2025-09-14 20:48:41 | INFO | backend.app.main:classify_email_text:209 - Received text classification request (length: 49)
+2025-09-14 20:48:41 | INFO | backend.app.services.email_classifier:classify_email:222 - Starting email classification for content length: 49
+2025-09-14 20:48:42 | INFO | backend.app.services.email_classifier:classify_email:238 - AI classification: produtivo (confidence: 0.700)
+2025-09-14 20:48:42 | INFO | backend.app.services.email_classifier:classify_email:260 - Email classified successfully in 0.183s: produtivo
+2025-09-14 20:48:42 | INFO | backend.app.main:classify_email_text:213 - Text classification completed: produtivo (confidence: 0.700)
+2025-09-14 20:48:42 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.186s)
+2025-09-14 20:49:15 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:49:15 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:49:16 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/
+2025-09-14 20:49:16 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.008s)
+2025-09-14 20:49:16 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/static/css/style.css
+2025-09-14 20:49:16 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/static/js/app.js
+2025-09-14 20:49:16 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.058s)
+2025-09-14 20:49:16 | INFO | backend.app.main:log_requests:142 - Response: 304 (0.059s)
+2025-09-14 20:49:16 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/health
+2025-09-14 20:49:16 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:49:16 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:49:16 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:49:31 | INFO | backend.app.main:log_requests:135 - Request: POST http://127.0.0.1:8000/classify
+2025-09-14 20:49:31 | INFO | backend.app.main:classify_email_text:209 - Received text classification request (length: 2725)
+2025-09-14 20:49:31 | INFO | backend.app.services.email_classifier:classify_email:222 - Starting email classification for content length: 2725
+2025-09-14 20:49:31 | INFO | backend.app.services.email_classifier:classify_email:238 - AI classification: produtivo (confidence: 0.700)
+2025-09-14 20:49:31 | INFO | backend.app.services.email_classifier:classify_email:260 - Email classified successfully in 0.253s: produtivo
+2025-09-14 20:49:31 | INFO | backend.app.main:classify_email_text:213 - Text classification completed: produtivo (confidence: 0.700)
+2025-09-14 20:49:31 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.255s)
+2025-09-14 20:49:32 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:49:32 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:49:46 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:49:46 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:49:52 | INFO | backend.app.main:log_requests:135 - Request: POST http://127.0.0.1:8000/classify/file
+2025-09-14 20:49:52 | INFO | backend.app.main:classify_email_file:233 - Received file classification request: message (1).txt
+2025-09-14 20:49:52 | INFO | backend.app.utils.file_processor:extract_text_from_txt:63 - Successfully decoded TXT file using utf-8 encoding
+2025-09-14 20:49:52 | INFO | backend.app.services.email_classifier:classify_email:222 - Starting email classification for content length: 4119
+2025-09-14 20:49:52 | INFO | backend.app.services.email_classifier:classify_email:238 - AI classification: produtivo (confidence: 0.700)
+2025-09-14 20:49:52 | INFO | backend.app.services.email_classifier:classify_email:260 - Email classified successfully in 0.309s: produtivo
+2025-09-14 20:49:52 | INFO | backend.app.main:classify_email_file:267 - File classification completed: produtivo (confidence: 0.700)
+2025-09-14 20:49:52 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.312s)
+2025-09-14 20:49:53 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:49:53 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:49:57 | INFO | backend.app.main:log_requests:135 - Request: POST http://127.0.0.1:8000/classify/file
+2025-09-14 20:49:57 | INFO | backend.app.main:classify_email_file:233 - Received file classification request: message (1).txt
+2025-09-14 20:49:57 | INFO | backend.app.utils.file_processor:extract_text_from_txt:63 - Successfully decoded TXT file using utf-8 encoding
+2025-09-14 20:49:57 | INFO | backend.app.services.email_classifier:classify_email:222 - Starting email classification for content length: 4119
+2025-09-14 20:49:57 | INFO | backend.app.services.email_classifier:classify_email:238 - AI classification: produtivo (confidence: 0.700)
+2025-09-14 20:49:57 | INFO | backend.app.services.email_classifier:classify_email:260 - Email classified successfully in 0.266s: produtivo
+2025-09-14 20:49:57 | INFO | backend.app.main:classify_email_file:267 - File classification completed: produtivo (confidence: 0.700)
+2025-09-14 20:49:57 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.269s)
+2025-09-14 20:49:58 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:49:58 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:50:17 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:50:17 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:50:47 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:50:47 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:51:17 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:51:17 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:51:47 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:51:47 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:52:17 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:52:17 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:52:47 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:52:47 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:53:21 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:53:21 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:54:21 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:54:21 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-14 20:55:21 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-14 20:55:21 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
