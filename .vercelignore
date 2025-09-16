@@ -1,0 +1,22 @@
+# Dependencies that are too large for Vercel
+Dockerfile
+requirements-production.txt
+models_cache/
+uploads/
+logs/
+data/
+.pytest_cache/
+tests/
+*.pyc
+__pycache__/
+.git/
+.env
+sys.stdout
+clean_cache.py
+start_server.py
+
+# Keep only essential files for Vercel
+!backend/
+!api/
+!requirements.txt
+!vercel.json

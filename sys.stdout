@@ -365,3 +365,202 @@
 2025-09-16 14:18:26 | INFO | backend.app.services.email_classifier:initialize_model:82 - Initializing AI model for email classification...
 2025-09-16 14:18:28 | INFO | backend.app.services.email_classifier:initialize_model:106 - AI model initialized successfully
 2025-09-16 14:18:28 | INFO | backend.app.main:lifespan:41 - Application startup completed successfully
+2025-09-16 16:05:28 | INFO | backend.app.main:lifespan:36 - Starting Email Classification System...
+2025-09-16 16:05:28 | INFO | backend.app.services.email_classifier:initialize_model:82 - Initializing AI model for email classification...
+2025-09-16 16:05:31 | INFO | backend.app.services.email_classifier:initialize_model:106 - AI model initialized successfully
+2025-09-16 16:05:31 | INFO | backend.app.main:lifespan:41 - Application startup completed successfully
+2025-09-16 16:05:31 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/
+2025-09-16 16:05:31 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.005s)
+2025-09-16 16:05:31 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/static/css/style.css
+2025-09-16 16:05:31 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/static/js/app.js
+2025-09-16 16:05:31 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.035s)
+2025-09-16 16:05:31 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.036s)
+2025-09-16 16:05:31 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/health
+2025-09-16 16:05:31 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:05:31 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.002s)
+2025-09-16 16:05:31 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:05:37 | INFO | backend.app.main:log_requests:135 - Request: POST http://127.0.0.1:8000/classify
+2025-09-16 16:05:37 | INFO | backend.app.main:classify_email_text:209 - Received text classification request (length: 229)
+2025-09-16 16:05:37 | INFO | backend.app.services.email_classifier:classify_email:269 - Starting email classification for content length: 229
+2025-09-16 16:05:37 | INFO | backend.app.services.email_classifier:classify_email:330 - AI classification: produtivo (confidence: 0.900)
+2025-09-16 16:05:37 | INFO | backend.app.services.email_classifier:classify_email:354 - Email classified successfully in 0.145s: produtivo
+2025-09-16 16:05:37 | INFO | backend.app.main:classify_email_text:213 - Text classification completed: produtivo (confidence: 0.900)
+2025-09-16 16:05:37 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.147s)
+2025-09-16 16:05:38 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:05:38 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:05:45 | INFO | backend.app.main:log_requests:135 - Request: POST http://127.0.0.1:8000/classify
+2025-09-16 16:05:45 | INFO | backend.app.main:classify_email_text:209 - Received text classification request (length: 201)
+2025-09-16 16:05:45 | INFO | backend.app.services.email_classifier:classify_email:269 - Starting email classification for content length: 201
+2025-09-16 16:05:45 | INFO | backend.app.services.email_classifier:classify_email:330 - AI classification: improdutivo (confidence: 0.900)
+2025-09-16 16:05:45 | INFO | backend.app.services.email_classifier:classify_email:354 - Email classified successfully in 0.065s: improdutivo
+2025-09-16 16:05:45 | INFO | backend.app.main:classify_email_text:213 - Text classification completed: improdutivo (confidence: 0.900)
+2025-09-16 16:05:45 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.066s)
+2025-09-16 16:05:46 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:05:46 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:05:52 | INFO | backend.app.main:log_requests:135 - Request: POST http://127.0.0.1:8000/classify
+2025-09-16 16:05:52 | INFO | backend.app.main:classify_email_text:209 - Received text classification request (length: 201)
+2025-09-16 16:05:52 | INFO | backend.app.services.email_classifier:classify_email:269 - Starting email classification for content length: 201
+2025-09-16 16:05:56 | ERROR | backend.app.services.openai_service:classify_email:87 - OpenAI classification failed: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2025-09-16 16:05:56 | INFO | backend.app.services.email_classifier:classify_email:330 - AI classification: improdutivo (confidence: 0.900)
+2025-09-16 16:05:56 | INFO | backend.app.services.email_classifier:classify_email:354 - Email classified successfully in 3.880s: improdutivo
+2025-09-16 16:05:56 | INFO | backend.app.main:classify_email_text:213 - Text classification completed: improdutivo (confidence: 0.900)
+2025-09-16 16:05:56 | INFO | backend.app.main:log_requests:142 - Response: 200 (3.881s)
+2025-09-16 16:05:57 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:05:57 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.000s)
+2025-09-16 16:06:01 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:06:01 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:06:04 | INFO | backend.app.main:log_requests:135 - Request: POST http://127.0.0.1:8000/classify
+2025-09-16 16:06:04 | INFO | backend.app.main:classify_email_text:209 - Received text classification request (length: 229)
+2025-09-16 16:06:04 | INFO | backend.app.services.email_classifier:classify_email:269 - Starting email classification for content length: 229
+2025-09-16 16:06:07 | ERROR | backend.app.services.openai_service:classify_email:87 - OpenAI classification failed: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2025-09-16 16:06:07 | INFO | backend.app.services.email_classifier:classify_email:330 - AI classification: produtivo (confidence: 0.900)
+2025-09-16 16:06:07 | INFO | backend.app.services.email_classifier:classify_email:354 - Email classified successfully in 3.290s: produtivo
+2025-09-16 16:06:07 | INFO | backend.app.main:classify_email_text:213 - Text classification completed: produtivo (confidence: 0.900)
+2025-09-16 16:06:07 | INFO | backend.app.main:log_requests:142 - Response: 200 (3.291s)
+2025-09-16 16:06:08 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:06:08 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:06:32 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:06:32 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:07:02 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:07:02 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:07:32 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:07:32 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:08:02 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:08:02 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:08:32 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:08:32 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:09:02 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:09:02 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:09:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:09:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:10:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:10:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:11:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:11:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:12:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:12:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:13:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:13:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:14:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:14:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:15:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:15:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:16:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:16:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:17:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:17:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:18:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:18:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:19:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:19:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:20:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:20:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:21:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:21:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:22:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:22:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:23:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:23:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:24:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:24:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:25:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:25:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:26:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:26:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:27:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:27:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:28:17 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:28:17 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.004s)
+2025-09-16 16:28:19 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/
+2025-09-16 16:28:19 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.002s)
+2025-09-16 16:28:19 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/health
+2025-09-16 16:28:19 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:28:19 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.002s)
+2025-09-16 16:28:19 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.002s)
+2025-09-16 16:28:49 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:28:49 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:29:19 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:29:19 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:29:49 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:29:49 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:30:19 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:30:19 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:30:49 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:30:49 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:31:19 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:31:19 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:31:49 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:31:49 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:32:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:32:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:33:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:33:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:33:57 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:33:57 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:34:19 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:34:19 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:34:49 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:34:49 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:35:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:35:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:36:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:36:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:37:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:37:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:38:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:38:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:39:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:39:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:40:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:40:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:41:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:41:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:42:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:42:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:43:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:43:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:44:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:44:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:45:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:45:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:46:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:46:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:47:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:47:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:48:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:48:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:49:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:49:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:50:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:50:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:51:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:51:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:52:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:52:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:53:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:53:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:54:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:54:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:55:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:55:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:56:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:56:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:57:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:57:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:58:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:58:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 16:59:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 16:59:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 17:00:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 17:00:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 17:01:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 17:01:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 17:02:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 17:02:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 17:03:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 17:03:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 17:04:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 17:04:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 17:05:44 | INFO | backend.app.main:log_requests:135 - Request: GET http://127.0.0.1:8000/metrics
+2025-09-16 17:05:44 | INFO | backend.app.main:log_requests:142 - Response: 200 (0.001s)
+2025-09-16 17:06:13 | INFO | backend.app.main:lifespan:47 - Shutting down Email Classification System...
