@@ -42,6 +42,7 @@ COPY --from=builder /root/.local /root/.local
 # Copiar apenas código necessário
 COPY backend/ ./backend/
 COPY frontend/ ./frontend/
+COPY .env ./
 
 # Criar diretórios necessários
 RUN mkdir -p /tmp/uploads /tmp/models_cache /tmp/logs
