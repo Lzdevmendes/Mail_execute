@@ -10,8 +10,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 if __name__ == "__main__":
-    print("🚀 Iniciando servidor de desenvolvimento...")
-    print("📧 Mail Execute - Sistema de Classificação de Emails")
+    print("Iniciando servidor de desenvolvimento...")
+    print("Mail Execute - Sistema de Classificacao de Emails")
     print("-" * 50)
 
     try:
@@ -23,6 +23,6 @@ if __name__ == "__main__":
             log_level="info"
         )
     except KeyboardInterrupt:
-        print("\n⏹️  Servidor parado pelo usuário")
+        print("\nServidor parado pelo usuario")
     except Exception as e:
-        print(f"❌ Erro ao iniciar servidor: {e}")
+        print(f"Erro ao iniciar servidor: {e}")

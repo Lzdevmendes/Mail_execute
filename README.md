@@ -7,7 +7,7 @@ Sistema inteligente para classificação automática de emails como **produtivos
 - **Classificação Inteligente**: Análise de emails usando IA híbrida (OpenAI + modelos locais)
 - **Interface Web Responsiva**: Frontend moderno com Bootstrap e JavaScript
 - **API REST Completa**: Endpoints para classificação, métricas e upload de arquivos
-- **Suporte a Arquivos**: Processamento de PDFs e arquivos de texto
+- **Suporte a Arquivos**: Processamento de PDFs (texto + OCR) e arquivos de texto
 - **Métricas em Tempo Real**: Dashboard com estatísticas de uso
 - **Respostas Automáticas**: Geração de respostas contextualizadas com OpenAI
 - **Sistema Híbrido**: Fallback automático entre OpenAI e modelos locais
@@ -90,7 +90,9 @@ Mail_execute/
 - **NLTK** - Processamento de linguagem natural
 - **Transformers + PyTorch** - Modelos de IA locais (RoBERTa)
 - **OpenAI API** - Integração com GPT-3.5/GPT-4 (opcional)
-- **PyPDF2** - Processamento de arquivos PDF
+- **PyPDF2 + OCR** - Processamento de PDFs digitais e scanned
+- **Pytesseract** - Reconhecimento óptico de caracteres (OCR)
+- **PDF2Image + Pillow** - Conversão e processamento de imagens
 
 ### Frontend
 - **HTML5/CSS3** - Estrutura e estilos
@@ -127,19 +129,42 @@ O sistema usa uma **abordagem híbrida inteligente**:
 
 ## 📈 Exemplos de Uso
 
-### Email Produtivo
+### 📧 Email Produtivo
 ```
-Preciso urgentemente dos relatórios de vendas para 
+Preciso urgentemente dos relatórios de vendas para
 a reunião de amanhã. O sistema não está funcionando.
 ```
 **Resultado**: `produtivo` (85% confiança)
 
-### Email Improdutivo
+### 💌 Email Improdutivo
 ```
-Oi pessoal! A festa de ontem foi incrível! 
+Oi pessoal! A festa de ontem foi incrível!
 Obrigado por tudo, abraços para todos!
 ```
 **Resultado**: `improdutivo` (90% confiança)
+
+### 📄 PDF Digital
+```
+Arquivo: contrato_digital.pdf
+Texto extraído diretamente (< 1s)
+Classificação: produtivo (92% confiança)
+```
+
+### 🖼️ PDF Scanned (OCR)
+```
+Arquivo: documento_digitalizado.pdf
+OCR automático detectado (3s)
+Texto extraído via Tesseract
+Classificação: produtivo (88% confiança)
+```
+
+### 🔄 PDF Híbrido
+```
+Arquivo: relatorio_misto.pdf
+Páginas 1-2: texto digital (rápido)
+Páginas 3-4: OCR automático (tabelas/imagens)
+Classificação: produtivo (90% confiança)
+```
 
 ## 🔧 Configuração para Desenvolvimento
 
@@ -182,14 +207,51 @@ Para usar a IA avançada com OpenAI:
 
 ### Dependências Python
 ```bash
-pip install fastapi uvicorn pydantic nltk transformers openai
+pip install fastapi uvicorn pydantic nltk transformers openai pytesseract Pillow pdf2image
 ```
+
+### 🔧 Instalação OCR (para PDFs scanned)
+
+#### Windows:
+1. Download Tesseract: https://github.com/UB-Mannheim/tesseract/wiki
+2. Instalar e adicionar ao PATH
+3. Ou definir caminho: `pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'`
+
+#### Linux:
+```bash
+sudo apt-get install tesseract-ocr tesseract-ocr-por
+```
+
+#### macOS:
+```bash
+brew install tesseract tesseract-lang
+```
+
+## 📄 Processamento de PDFs
+
+O sistema suporta **qualquer tipo de PDF** com fallback inteligente:
+
+### 🔄 **Método Híbrido**:
+1. **Extração tradicional** (PDFs digitais) - Rápido
+2. **OCR automático** (PDFs scanned) - Preciso
+3. **Suporte híbrido** (PDFs mistos) - Completo
+
+### ✅ **Tipos de PDF suportados**:
+- **📝 PDFs digitais**: Texto selecionável (extraído diretamente)
+- **🖼️ PDFs scanned**: Documentos digitalizados (via OCR)
+- **🔄 PDFs híbridos**: Combinação de texto + imagem
+- **🌍 Multilíngue**: Português + Inglês via OCR
+
+### ⚡ **Performance**:
+- **Digital**: < 1 segundo
+- **OCR**: 2-5 segundos por página
+- **Automático**: Escolhe o melhor método
 
 ## 📋 API Endpoints
 
 ### Classificação
 - `POST /classify` - Classifica texto
-- `POST /classify/file` - Classifica arquivo
+- `POST /classify/file` - Classifica arquivo (PDF/TXT com OCR automático)
 
 ### Sistema
 - `GET /health` - Status do sistema
@@ -310,6 +372,8 @@ Execute os testes: `python -m pytest tests/` ou `python tests/test_api.py`
 - ✅ **Deploy-ready para qualquer plataforma**
 - ✅ **Scripts de automação**
 - ✅ **Cache de modelos inteligente**
+- ✅ **OCR integrado para PDFs scanned**
+- ✅ **Processamento universal de documentos**
 
 ---
 

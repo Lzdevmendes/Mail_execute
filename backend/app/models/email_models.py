@@ -20,7 +20,7 @@ class EmailSource(str, Enum):
 
 class EmailClassificationRequest(BaseModel):
     """Request model for email classification"""
-    content: str = Field(..., min_length=10, max_length=10000, description="Email content to classify")
+    content: str = Field(..., min_length=10, max_length=50000, description="Email content to classify")
     source: EmailSource = Field(default=EmailSource.API, description="Source of the request")
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="Additional metadata")
 
@@ -57,11 +57,10 @@ class MetricsResponse(BaseModel):
 class FileUploadResponse(BaseModel):
     """File upload response model"""
     filename: str = Field(..., description="Uploaded filename")
-    size: int = Field(..., description="File size in bytes")
-    content_type: str = Field(..., description="File MIME type")
-    processed: bool = Field(default=False, description="Whether file was processed")
-    content: Optional[str] = Field(default=None, description="Extracted content")
-    error: Optional[str] = Field(default=None, description="Error message if any")
+    file_size: int = Field(..., description="File size in bytes")
+    content_preview: str = Field(..., description="Preview of extracted content")
+    extraction_success: bool = Field(default=False, description="Whether text extraction was successful")
+    error_message: Optional[str] = Field(default=None, description="Error message if extraction failed")
 
 
 class ErrorResponse(BaseModel):

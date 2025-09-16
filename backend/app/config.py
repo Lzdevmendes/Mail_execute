@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     APP_NAME: str = Field(default="Email Classification System", description="Application name")
     APP_VERSION: str = Field(default="1.0.0", description="Application version")
     DEBUG: bool = Field(default=False, description="Enable debug mode")
+    ENVIRONMENT: str = Field(default="development", description="Application environment")
     
     # Server Settings
     HOST: str = Field(default="0.0.0.0", description="Server host")
@@ -42,7 +43,7 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = Field(default="./uploads", description="Directory for temporary file uploads")
     
     MIN_CONTENT_LENGTH: int = Field(default=10, description="Minimum content length for processing")
-    MAX_CONTENT_LENGTH: int = Field(default=10000, description="Maximum content length for processing")
+    MAX_CONTENT_LENGTH: int = Field(default=50000, description="Maximum content length for processing")
     DEFAULT_CONFIDENCE_THRESHOLD: float = Field(
         default=0.7,
         description="Default confidence threshold for classifications"
@@ -116,7 +117,7 @@ class Settings(BaseSettings):
     @property
     def is_production(self) -> bool:
         """Check if running in production environment."""
-        return not self.DEBUG and os.getenv("ENVIRONMENT", "development").lower() == "production"
+        return not self.DEBUG and self.ENVIRONMENT.lower() == "production"
     
     @property
     def allowed_file_types(self) -> List[str]:

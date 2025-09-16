@@ -4,7 +4,15 @@ class EmailClassificationApp {
         this.loadingOverlay = document.getElementById('loadingOverlay');
         this.statusBadge = document.getElementById('statusBadge');
         this.resultsSection = document.getElementById('resultsSection');
-        
+
+        // AI Model control
+        this.aiModelToggle = document.getElementById('aiModelToggle');
+        this.aiModelLabel = document.getElementById('aiModelLabel');
+        this.aiModelDescription = document.getElementById('aiModelDescription');
+        this.localModel = document.getElementById('localModel');
+        this.cloudModel = document.getElementById('cloudModel');
+        this.useOpenAI = false; // Default to local (mais rápido)
+
         // Form elements
         this.textForm = document.getElementById('textClassificationForm');
         this.fileForm = document.getElementById('fileClassificationForm');
@@ -14,7 +22,7 @@ class EmailClassificationApp {
         this.browseFileBtn = document.getElementById('browseFileBtn');
         this.fileInfo = document.getElementById('fileInfo');
         this.removeFileBtn = document.getElementById('removeFile');
-        
+
         // Toast elements
         this.successToast = new bootstrap.Toast(document.getElementById('successToast'));
         this.errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
@@ -27,12 +35,13 @@ class EmailClassificationApp {
         this.setupEventListeners();
         this.setupFileDropZone();
         this.setupCharacterCounter();
+        this.setupAIModelToggle();
         this.checkSystemStatus();
         this.loadMetrics();
-        
+
         // Setup periodic metrics refresh
         setInterval(() => this.loadMetrics(), 30000); // Every 30 seconds
-        
+
         console.log('Email Classification System initialized successfully');
     }
     
@@ -56,6 +65,13 @@ class EmailClassificationApp {
         document.querySelectorAll('.use-example').forEach(btn => {
             btn.addEventListener('click', (e) => this.useExample(e));
         });
+
+        // AI Model toggle
+        this.aiModelToggle.addEventListener('change', () => this.handleAIModelToggle());
+
+        // Make model options clickable
+        this.localModel.addEventListener('click', () => this.selectLocalModel());
+        this.cloudModel.addEventListener('click', () => this.selectCloudModel());
         
         // Tab change handling
         document.querySelectorAll('#inputTabs button').forEach(tab => {
@@ -146,16 +162,26 @@ class EmailClassificationApp {
     
     async handleTextClassification(e) {
         e.preventDefault();
-        
+
         const content = this.emailContent.value.trim();
-        
+
         if (!this.validateTextInput(content)) {
             return;
         }
-        
+
+        // Disable submit button to prevent double submissions
+        const submitBtn = this.textForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processando...';
+
         try {
             this.showLoading();
-            
+
+            // Add timeout for better UX
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
             const response = await this.apiCall('/classify', {
                 method: 'POST',
                 headers: {
@@ -163,49 +189,81 @@ class EmailClassificationApp {
                 },
                 body: JSON.stringify({
                     content: content,
-                    source: 'text_input'
-                })
+                    source: 'text_input',
+                    metadata: {
+                        use_openai: this.useOpenAI,
+                        preferred_model: this.useOpenAI ? 'openai' : 'local'
+                    }
+                }),
+                signal: controller.signal
             });
-            
+
+            clearTimeout(timeoutId);
             this.displayResults(response);
             this.showToast('success', 'Email classificado com sucesso!');
-            
+
         } catch (error) {
             console.error('Text classification error:', error);
-            this.showToast('error', 'Erro ao classificar email: ' + error.message);
+            const errorMsg = error.name === 'AbortError' ?
+                'Tempo limite excedido. Tente novamente.' :
+                'Erro ao classificar email: ' + error.message;
+            this.showToast('error', errorMsg);
         } finally {
             this.hideLoading();
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
         }
     }
     
     async handleFileClassification(e) {
         e.preventDefault();
-        
+
         const file = this.emailFile.files[0];
-        
+
         if (!this.validateFileInput(file)) {
             return;
         }
-        
+
+        // Disable submit button and show progress
+        const submitBtn = this.fileForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-upload fa-spin me-2"></i>Processando arquivo...';
+
         try {
             this.showLoading();
-            
+
             const formData = new FormData();
             formData.append('file', file);
-            
+            formData.append('metadata', JSON.stringify({
+                use_openai: this.useOpenAI,
+                preferred_model: this.useOpenAI ? 'openai' : 'local'
+            }));
+
+            // Add timeout for file processing
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 seconds for files
+
             const response = await this.apiCall('/classify/file', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                signal: controller.signal
             });
-            
+
+            clearTimeout(timeoutId);
             this.displayResults(response);
             this.showToast('success', 'Arquivo processado e classificado com sucesso!');
-            
+
         } catch (error) {
             console.error('File classification error:', error);
-            this.showToast('error', 'Erro ao processar arquivo: ' + error.message);
+            const errorMsg = error.name === 'AbortError' ?
+                'Tempo limite para processamento do arquivo excedido.' :
+                'Erro ao processar arquivo: ' + error.message;
+            this.showToast('error', errorMsg);
         } finally {
             this.hideLoading();
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
         }
     }
     
@@ -255,10 +313,14 @@ class EmailClassificationApp {
     }
 
     displayResults(data) {
-        // Update category
+        // Add smooth animation to results
+        this.resultsSection.style.opacity = '0';
+        this.resultsSection.style.display = 'block';
+
+        // Update category with animation
         const categoryText = document.getElementById('categoryText');
         const categoryIcon = document.getElementById('categoryIcon');
-        
+
         if (data.category === 'produtivo') {
             categoryText.textContent = 'PRODUTIVO';
             categoryText.className = 'mb-0 fw-bold text-success';
@@ -268,15 +330,18 @@ class EmailClassificationApp {
             categoryText.className = 'mb-0 fw-bold text-warning';
             categoryIcon.className = 'fas fa-info-circle fa-2x text-warning';
         }
-        
-        // Update confidence
+
+        // Update confidence with animated progress bar
         const confidence = Math.round(data.confidence * 100);
         document.getElementById('confidenceText').textContent = confidence + '%';
-        
+
         const confidenceBar = document.getElementById('confidenceBar');
-        confidenceBar.style.width = confidence + '%';
-        confidenceBar.setAttribute('aria-valuenow', confidence);
-        
+
+        // Reset progress bar for animation
+        confidenceBar.style.width = '0%';
+        confidenceBar.setAttribute('aria-valuenow', 0);
+
+        // Set color based on confidence
         if (confidence >= 80) {
             confidenceBar.className = 'progress-bar bg-success';
         } else if (confidence >= 60) {
@@ -284,24 +349,45 @@ class EmailClassificationApp {
         } else {
             confidenceBar.className = 'progress-bar bg-danger';
         }
-        
+
+        // Animate progress bar
+        setTimeout(() => {
+            confidenceBar.style.width = confidence + '%';
+            confidenceBar.setAttribute('aria-valuenow', confidence);
+        }, 300);
+
         // Update response
         document.getElementById('suggestedResponseText').textContent = data.suggested_response;
-        
+
         // Update processing info
-        document.getElementById('processingTime').textContent = 
-            (data.processing_time * 1000).toFixed(0) + ' ms';
-        
-        document.getElementById('timestamp').textContent = 
+        const processingTime = data.processing_time ? (data.processing_time * 1000) : 0;
+        document.getElementById('processingTime').textContent =
+            Math.round(processingTime) + ' ms';
+
+        document.getElementById('timestamp').textContent =
             new Date(data.timestamp).toLocaleString('pt-BR');
-        
+
+        // Show classification method if available
+        if (data.model_used) {
+            const methodBadge = document.getElementById('classificationMethod');
+            if (methodBadge) {
+                const methodName = data.model_used === 'openai' ? 'OpenAI GPT' :
+                                 data.model_used === 'ai' ? 'AI Local' : 'Regras';
+                methodBadge.textContent = methodName;
+                methodBadge.className = `badge ${data.model_used === 'openai' ? 'bg-primary' : 'bg-secondary'}`;
+            }
+        }
+
         // Store result for download
         this.lastResult = data;
-        
-        // Show results section
-        this.resultsSection.style.display = 'block';
-        this.resultsSection.scrollIntoView({ behavior: 'smooth' });
-        
+
+        // Fade in results with smooth animation
+        setTimeout(() => {
+            this.resultsSection.style.transition = 'opacity 0.5s ease-in-out';
+            this.resultsSection.style.opacity = '1';
+            this.resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+
         // Load updated metrics
         setTimeout(() => this.loadMetrics(), 1000);
     }
@@ -467,7 +553,63 @@ class EmailClassificationApp {
             this.errorToast.show();
         }
     }
-    
+
+    setupAIModelToggle() {
+        // Initialize AI model toggle state
+        this.updateAIModelDisplay();
+    }
+
+    handleAIModelToggle() {
+        this.useOpenAI = this.aiModelToggle.checked;
+        this.updateAIModelDisplay();
+
+        // Add visual feedback during toggle
+        this.aiModelToggle.disabled = true;
+        setTimeout(() => {
+            this.aiModelToggle.disabled = false;
+        }, 500);
+
+        // Show toast notification
+        const modelName = this.useOpenAI ? 'OpenAI GPT' : 'Transformers (Local)';
+        this.showToast('success', `Modelo alterado para: ${modelName}`);
+
+        console.log(`AI Model switched to: ${modelName}`);
+    }
+
+    selectLocalModel() {
+        if (!this.useOpenAI) return; // Already selected
+
+        this.useOpenAI = false;
+        this.updateAIModelDisplay();
+        this.showToast('success', 'Modelo alterado para: Transformers (Local)');
+        console.log('AI Model switched to: Transformers (Local)');
+    }
+
+    selectCloudModel() {
+        if (this.useOpenAI) return; // Already selected
+
+        this.useOpenAI = true;
+        this.updateAIModelDisplay();
+        this.showToast('success', 'Modelo alterado para: OpenAI GPT');
+        console.log('AI Model switched to: OpenAI GPT');
+    }
+
+    updateAIModelDisplay() {
+        if (this.useOpenAI) {
+            // OpenAI mode (toggle ON)
+            this.aiModelLabel.textContent = 'Processamento na nuvem com GPT-3.5/GPT-4 (mais preciso)';
+            this.aiModelToggle.checked = true;
+            this.localModel.classList.remove('active');
+            this.cloudModel.classList.add('active');
+        } else {
+            // Local mode (toggle OFF)
+            this.aiModelLabel.textContent = 'Processamento local com RoBERTa + NLTK (mais rápido)';
+            this.aiModelToggle.checked = false;
+            this.localModel.classList.add('active');
+            this.cloudModel.classList.remove('active');
+        }
+    }
+
     async apiCall(endpoint, options = {}) {
         const url = this.apiBaseUrl + endpoint;
         

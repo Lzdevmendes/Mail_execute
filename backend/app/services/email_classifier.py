@@ -116,15 +116,20 @@ class EmailClassifier:
         
         # Count productive indicators
         productive_score = 0
+        productive_found = []
         for keyword in self.productive_keywords.get(language, []):
             if keyword in text_lower:
-                productive_score += 1
-        
+                productive_score += 2  # Aumentar peso das palavras produtivas
+                productive_found.append(keyword)
+
         # Count unproductive indicators
         unproductive_score = 0
+        unproductive_found = []
         for keyword in self.unproductive_keywords.get(language, []):
             if keyword in text_lower:
-                unproductive_score += 1
+                unproductive_score += 3  # Aumentar ainda mais o peso das palavras improdutivas
+                unproductive_found.append(keyword)
+
         
         # Additional scoring based on features
         if features.get('question_score', 0) > 0:
@@ -141,46 +146,80 @@ class EmailClassifier:
         
         # Determine category and confidence
         total_score = productive_score + unproductive_score
-        
+
         if total_score == 0:
-            return EmailCategory.PRODUCTIVE, 0.5
-        
+            return EmailCategory.PRODUCTIVE, 0.55
+
+        # Calcular confiança mais dinâmica baseada no conteúdo
+        score_difference = abs(productive_score - unproductive_score)
+        base_confidence = 0.65
+
         if productive_score > unproductive_score:
-            confidence = min(0.9, 0.6 + (productive_score - unproductive_score) / total_score * 0.3)
+            # Quanto maior a diferença, maior a confiança
+            confidence = min(0.95, base_confidence + (score_difference / max(total_score, 1)) * 0.25)
+            # Bonus para palavras muito específicas
+            if productive_score >= 6:  # Múltiplas palavras produtivas
+                confidence = min(0.98, confidence + 0.1)
             return EmailCategory.PRODUCTIVE, confidence
-        else:
-            confidence = min(0.9, 0.6 + (unproductive_score - productive_score) / total_score * 0.3)
+        elif unproductive_score > productive_score:
+            confidence = min(0.95, base_confidence + (score_difference / max(total_score, 1)) * 0.25)
+            # Bonus para palavras muito específicas
+            if unproductive_score >= 9:  # Múltiplas palavras improdutivas
+                confidence = min(0.98, confidence + 0.1)
             return EmailCategory.UNPRODUCTIVE, confidence
+        else:
+            # Empate - baixa confiança
+            return EmailCategory.PRODUCTIVE, 0.52
     
     async def _classify_with_ai(self, text: str) -> Tuple[EmailCategory, float]:
         try:
             # Truncate text if too long
             if len(text) > 500:
                 text = text[:500]
-            
+
             # Get sentiment scores
             results = self.sentiment_classifier(text)
-            
+
             if not results or not isinstance(results, list) or not results[0]:
                 raise Exception("Invalid AI model response")
-            
+
             scores = results[0]
-            
+
             # Find the highest confidence score
             best_result = max(scores, key=lambda x: x['score'])
             sentiment = best_result['label'].lower()
             confidence = best_result['score']
-            
-            if sentiment in ['negative', 'neg']:
-                # Negative sentiment often means problems/requests = productive
+
+
+            # Lógica melhorada: usar palavras-chave em combinação com sentiment
+            text_lower = text.lower()
+
+            # Detectar palavras-chave improdutivas diretamente
+            unproductive_keywords = ['parabéns', 'felicitações', 'aniversário', 'natal', 'obrigado', 'agradeço', 'bom dia', 'boa tarde', 'feliz', 'abraço']
+            productive_keywords = ['problema', 'erro', 'ajuda', 'urgente', 'prazo', 'relatório', 'dados', 'projeto']
+
+            unproductive_count = sum(1 for kw in unproductive_keywords if kw in text_lower)
+            productive_count = sum(1 for kw in productive_keywords if kw in text_lower)
+
+            if unproductive_count > productive_count and unproductive_count > 0:
+                # Claramente improdutivo
+                return EmailCategory.UNPRODUCTIVE, min(0.9, confidence + 0.1)
+            elif productive_count > 0:
+                # Claramente produtivo
                 return EmailCategory.PRODUCTIVE, min(0.9, confidence + 0.1)
-            elif sentiment in ['positive', 'pos']:
-                # Positive could be either - use moderate confidence for unproductive
+            elif sentiment in ['positive', 'pos'] and 'parabéns' in text_lower or 'feliz' in text_lower:
+                # Positivo com palavras de celebração = improdutivo
                 return EmailCategory.UNPRODUCTIVE, min(0.8, confidence)
+            elif sentiment in ['negative', 'neg']:
+                # Negativo geralmente indica problemas = produtivo
+                return EmailCategory.PRODUCTIVE, min(0.8, confidence)
             else:
-                # Neutral - default to productive with moderate confidence
-                return EmailCategory.PRODUCTIVE, min(0.7, confidence)
-                
+                # Default baseado em sentiment mais conservador
+                if sentiment in ['positive', 'pos']:
+                    return EmailCategory.UNPRODUCTIVE, min(0.6, confidence)
+                else:
+                    return EmailCategory.PRODUCTIVE, min(0.6, confidence)
+
         except Exception as e:
             logger.error(f"AI classification failed: {str(e)}")
             return EmailCategory.PRODUCTIVE, 0.5
@@ -222,13 +261,20 @@ class EmailClassifier:
         try:
             logger.info(f"Starting email classification for content length: {len(request.content)}")
 
-            # Try OpenAI classification first if available
+            # Check user preference for AI model
+            force_openai = False
+            force_local = False
+            if request.metadata:
+                force_openai = request.metadata.get('use_openai', False)
+                force_local = request.metadata.get('preferred_model') == 'local'
+
+            # Try OpenAI classification first if available and preferred
             category = EmailCategory.PRODUCTIVE
             confidence = 0.6
             classification_method = "rule-based"
             suggested_response = ""
 
-            if openai_service.is_available():
+            if openai_service.is_available() and force_openai and not force_local:
                 try:
                     openai_result = await openai_service.classify_email(request.content)
                     if openai_result:
@@ -246,15 +292,19 @@ class EmailClassifier:
                         self._update_metrics(category, processing_time, confidence)
 
                         return EmailClassificationResponse(
-                            category=category,
+                            category=category.value,
                             confidence=confidence,
                             suggested_response=suggested_response,
-                            processing_time_ms=processing_time * 1000,
-                            classification_method=classification_method,
-                            features={}
+                            processing_time=processing_time,
+                            timestamp=datetime.now(timezone.utc),
+                            model_used=classification_method
                         )
                 except Exception as e:
                     logger.warning(f"OpenAI classification failed, falling back to local methods: {e}")
+
+            # Skip local models if OpenAI was forced and failed
+            if force_openai and not openai_service.is_available():
+                raise Exception("OpenAI was requested but is not available. Check API key configuration.")
 
             # Preprocess the text for local classification
             cleaned_text = self.nlp_processor.clean_text(request.content)
@@ -272,6 +322,7 @@ class EmailClassifier:
                 category, confidence = await self._classify_with_ai(preprocessed_text)
                 logger.info(f"AI classification: {category.value} (confidence: {confidence:.3f})")
             else:
+                logger.info("Using rule-based classification")
                 category, confidence = self._classify_with_rules(cleaned_text, features)
                 logger.info(f"Rule-based classification: {category.value} (confidence: {confidence:.3f})")
             
@@ -289,7 +340,8 @@ class EmailClassifier:
                 confidence=confidence,
                 suggested_response=suggested_response,
                 processing_time=processing_time,
-                timestamp=datetime.now(timezone.utc)
+                timestamp=datetime.now(timezone.utc),
+                model_used=classification_method
             )
             
             logger.info(f"Email classified successfully in {processing_time:.3f}s: {category.value}")
@@ -328,11 +380,12 @@ class EmailClassifier:
                 logger.error(f"Failed to classify email {i}: {str(result)}")
                 # Create error response
                 responses.append(EmailClassificationResponse(
-                    category=EmailCategory.PRODUCTIVE,  # Default
+                    category=EmailCategory.PRODUCTIVE.value,  # Default
                     confidence=0.0,
                     suggested_response="Desculpe, não foi possível processar este email no momento.",
                     processing_time=0.0,
-                    timestamp=datetime.now(timezone.utc)
+                    timestamp=datetime.now(timezone.utc),
+                    model_used="error_fallback"
                 ))
             else:
                 responses.append(result)

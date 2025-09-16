@@ -7,6 +7,20 @@ from fastapi import UploadFile, HTTPException
 from PyPDF2 import PdfReader
 from loguru import logger
 
+# OCR dependencies (optional)
+try:
+    import pytesseract
+    from PIL import Image
+    from pdf2image import convert_from_bytes
+    OCR_AVAILABLE = True
+    logger.info("OCR capabilities available (pytesseract + pdf2image)")
+except ImportError as e:
+    pytesseract = None
+    Image = None
+    convert_from_bytes = None
+    OCR_AVAILABLE = False
+    logger.warning(f"OCR not available: {e}. Install with: pip install pytesseract Pillow pdf2image")
+
 from ..config import settings
 from ..models.email_models import FileUploadResponse
 
@@ -75,19 +89,70 @@ class FileProcessor:
             raise Exception(f"Failed to process TXT file: {str(e)}")
     
     @staticmethod
+    def extract_text_with_ocr(file_content: bytes) -> str:
+        """Extract text from PDF using OCR (for image-based PDFs)."""
+        if not OCR_AVAILABLE:
+            raise Exception("OCR not available. Install: pip install pytesseract Pillow pdf2image")
+
+        try:
+            # Convert PDF pages to images
+            logger.info("Converting PDF to images for OCR processing...")
+            images = convert_from_bytes(file_content, dpi=200, fmt='JPEG')
+
+            if not images:
+                raise Exception("Could not convert PDF to images")
+
+            # Extract text from each page using OCR
+            text_content = []
+            for page_num, image in enumerate(images, 1):
+                try:
+                    # Configure tesseract for better Portuguese recognition
+                    custom_config = r'--oem 3 --psm 6 -l por+eng'
+                    page_text = pytesseract.image_to_string(image, config=custom_config)
+
+                    if page_text.strip():
+                        text_content.append(page_text.strip())
+                        logger.debug(f"OCR extracted text from page {page_num} ({len(page_text)} chars)")
+                    else:
+                        logger.warning(f"No text found on page {page_num} via OCR")
+
+                except Exception as ocr_error:
+                    logger.warning(f"OCR failed for page {page_num}: {str(ocr_error)}")
+                    continue
+
+            if not text_content:
+                raise Exception("No text could be extracted via OCR")
+
+            # Join all pages
+            full_text = "\n\n".join(text_content)
+
+            # Check if OCR mistakenly extracted HTML (sometimes happens with corrupted PDFs)
+            if full_text.strip().startswith('<!DOCTYPE html>') or '<html>' in full_text[:500]:
+                logger.warning("OCR extracted HTML content, PDF may be corrupted or contain embedded web content")
+                raise Exception("PDF contains HTML content and cannot be processed as text document")
+
+            logger.info(f"OCR successfully extracted text from {len(images)} pages ({len(full_text)} chars)")
+
+            return full_text.strip()
+
+        except Exception as e:
+            logger.error(f"OCR extraction failed: {str(e)}")
+            raise Exception(f"OCR processing failed: {str(e)}")
+
+    @staticmethod
     def extract_text_from_pdf(file_content: bytes) -> str:
         try:
             # Create a BytesIO object from the file content
             pdf_file = io.BytesIO(file_content)
-            
+
             # Create PDF reader
             pdf_reader = PdfReader(pdf_file)
-            
+
             # Check if PDF is encrypted
             if pdf_reader.is_encrypted:
                 raise Exception("Cannot process encrypted PDF files")
-            
-            # Extract text from all pages
+
+            # Extract text from all pages (traditional method)
             text_content = []
             for page_num, page in enumerate(pdf_reader.pages, 1):
                 try:
@@ -98,16 +163,20 @@ class FileProcessor:
                 except Exception as page_error:
                     logger.warning(f"Failed to extract text from PDF page {page_num}: {str(page_error)}")
                     continue
-            
-            if not text_content:
-                raise Exception("No readable text found in PDF file")
-            
-            # Join all pages with double newline
-            full_text = "\n\n".join(text_content)
-            logger.info(f"Successfully extracted text from PDF ({len(pdf_reader.pages)} pages)")
-            
-            return full_text.strip()
-            
+
+            # If traditional extraction found text, use it
+            if text_content:
+                full_text = "\n\n".join(text_content)
+                logger.info(f"Successfully extracted text from PDF ({len(pdf_reader.pages)} pages)")
+                return full_text.strip()
+
+            # If no text found and OCR is available, try OCR
+            if OCR_AVAILABLE:
+                logger.info("No text found with traditional extraction, trying OCR...")
+                return FileProcessor.extract_text_with_ocr(file_content)
+            else:
+                raise Exception("No readable text found in PDF file. Install OCR dependencies for image-based PDFs: pip install pytesseract Pillow pdf2image")
+
         except Exception as e:
             logger.error(f"Failed to extract text from PDF file: {str(e)}")
             raise Exception(f"Failed to process PDF file: {str(e)}")
@@ -137,9 +206,17 @@ class FileProcessor:
                 # Validate extracted content
                 if not extracted_text.strip():
                     raise Exception("No readable content found in file")
-                
+
                 if len(extracted_text) < settings.MIN_CONTENT_LENGTH:
                     raise Exception(f"Content too short (minimum {settings.MIN_CONTENT_LENGTH} characters required)")
+
+                # Intelligent truncation for very long texts
+                if len(extracted_text) > settings.MAX_CONTENT_LENGTH:
+                    logger.warning(f"Content too long ({len(extracted_text)} chars), truncating to {settings.MAX_CONTENT_LENGTH}")
+                    # Keep first part + last part to preserve context
+                    first_part = extracted_text[:settings.MAX_CONTENT_LENGTH // 2]
+                    last_part = extracted_text[-(settings.MAX_CONTENT_LENGTH // 2):]
+                    extracted_text = first_part + "\n\n[... CONTEÚDO TRUNCADO ...]\n\n" + last_part
                 
                 # Create preview
                 content_preview = extracted_text[:cls.MAX_PREVIEW_LENGTH]

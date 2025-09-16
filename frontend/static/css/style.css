@@ -506,3 +506,149 @@ main {
         font-size: 0.65rem;
     }
 }
+
+/* AI Model Selector Styles */
+.ai-selector-container .card {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: 2px solid #e3f2fd;
+}
+
+.ai-selector-container .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-color: #2196f3;
+}
+
+/* Model option styles */
+.ai-selector-container .model-option {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.4;
+    filter: blur(1px) grayscale(50%);
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-selector-container .model-option:hover {
+    opacity: 0.7;
+    filter: blur(0px) grayscale(20%);
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.ai-selector-container .model-option.active {
+    opacity: 1;
+    filter: blur(0px) grayscale(0%);
+    transform: scale(1.05);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.ai-selector-container .model-option.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.ai-selector-container .model-option.active .fa-microchip {
+    color: #4caf50 !important;
+    text-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+    animation: pulse-green 2s infinite;
+}
+
+.ai-selector-container .model-option.active .fa-cloud {
+    color: #2196f3 !important;
+    text-shadow: 0 0 15px rgba(33, 150, 243, 0.8);
+    animation: pulse-blue 2s infinite;
+}
+
+@keyframes pulse-green {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); text-shadow: 0 0 20px rgba(76, 175, 80, 1); }
+}
+
+@keyframes pulse-blue {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); text-shadow: 0 0 20px rgba(33, 150, 243, 1); }
+}
+
+/* Text styling for active/inactive */
+.ai-selector-container .model-option .fw-semibold,
+.ai-selector-container .model-option .text-muted {
+    transition: all 0.3s ease;
+}
+
+.ai-selector-container .model-option.active .fw-semibold {
+    color: #333 !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.ai-selector-container .model-option.active .text-muted {
+    color: #666 !important;
+    font-weight: 500 !important;
+}
+
+.ai-selector-container .model-option:not(.active) .fw-semibold {
+    color: #999 !important;
+}
+
+.ai-selector-container .model-option:not(.active) .text-muted {
+    color: #bbb !important;
+}
+
+.ai-selector-container .form-check-input:checked {
+    background-color: #2196f3;
+    border-color: #2196f3;
+}
+
+.ai-selector-container .form-check-input:focus {
+    border-color: #2196f3;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(33, 150, 243, 0.25);
+}
+
+/* Toggle animation */
+.ai-selector-container .form-check-input {
+    transition: all 0.3s ease;
+}
+
+/* AI Model status indicators */
+.ai-model-status-local {
+    color: #4caf50;
+}
+
+.ai-model-status-openai {
+    color: #2196f3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .ai-selector-container .card {
+        margin: 0 15px;
+    }
+
+    .ai-selector-container .d-flex {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .ai-selector-container .form-check {
+        margin-top: 15px;
+    }
+}
