@@ -1,59 +1,87 @@
-# Multi-stage build para reduzir tamanho final
-FROM python:3.11-slim as builder
+# ---------- STAGE: builder ----------
+FROM python:3.11-slim AS builder
 
-# Variáveis de ambiente para build
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
-WORKDIR /app
-
-# Instalar dependências de build apenas no builder
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copiar requirements otimizado para produção e instalar
-COPY requirements-production.txt ./requirements.txt
-RUN pip install --no-cache-dir --user -r requirements.txt
-
-# Stage final - imagem limpa
-FROM python:3.11-slim
-
-# Variáveis de ambiente para produção
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app \
-    PORT=8000 \
-    ENVIRONMENT=production \
-    DEBUG=false \
     PATH=/root/.local/bin:$PATH
 
 WORKDIR /app
 
-# Instalar apenas dependências runtime essenciais
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
+# Dependências de sistema necessárias apenas para construir wheels
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    libffi-dev \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copiar Python packages do builder
+# Copiar apenas requirements (otimiza cache Docker)
+COPY requirements-production.txt ./requirements.txt
+
+# Atualiza pip e cria wheels para evitar recompilar no final
+RUN python -m pip install --upgrade pip setuptools wheel \
+ && pip wheel --no-cache-dir -r requirements.txt -w /wheels
+
+# Instalar a partir das wheels para garantir consistência e reduzir recompilação
+RUN pip install --no-index --find-links /wheels --no-cache-dir -r requirements.txt \
+    --prefix=/root/.local
+
+# ---------- STAGE: final ----------
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH=/root/.local/bin:$PATH \
+    NLTK_DATA=/usr/local/share/nltk_data \
+    PORT=8000 \
+    ENVIRONMENT=production \
+    DEBUG=false
+
+WORKDIR /app
+
+# Instalar runtime system packages necessários (OCR, PDF rendering, libs de runtime)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    tesseract-ocr \
+    poppler-utils \
+    libgl1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar pacotes Python instalados do builder
 COPY --from=builder /root/.local /root/.local
 
-# Copiar apenas código necessário
+# Copiar apenas o que é necessário da aplicação
+# Ajuste estes COPY conforme sua estrutura real (minimize arquivos copiados)
 COPY backend/ ./backend/
 COPY frontend/ ./frontend/
-COPY .env ./
+COPY requirements-production.txt ./requirements-production.txt
 
-# Criar diretórios necessários
-RUN mkdir -p /tmp/uploads /tmp/models_cache /tmp/logs
+# NÃO copie .env! Use variáveis de ambiente no provedor.
+# COPY .env ./
 
-# Download NLTK data com cache otimizado
-RUN python -c "import nltk; import os; os.makedirs('/tmp/nltk_data', exist_ok=True); nltk.data.path.append('/tmp/nltk_data'); nltk.download('punkt', download_dir='/tmp/nltk_data', quiet=True); nltk.download('stopwords', download_dir='/tmp/nltk_data', quiet=True); nltk.download('rslp', download_dir='/tmp/nltk_data', quiet=True)" || true
+# Criar diretórios necessários em runtime
+RUN mkdir -p /tmp/uploads /tmp/models_cache /tmp/logs $NLTK_DATA
 
-# Limpar cache Python
+# Baixar recursos NLTK para diretório persistente e pronto para uso
+RUN python - <<'PY'
+import nltk, os
+nltk.data.path.append(os.environ.get('NLTK_DATA'))
+nltk.download('punkt', download_dir=os.environ.get('NLTK_DATA'), quiet=True)
+nltk.download('stopwords', download_dir=os.environ.get('NLTK_DATA'), quiet=True)
+nltk.download('rslp', download_dir=os.environ.get('NLTK_DATA'), quiet=True)
+PY
+
+# Limpeza (apenas arquivos .pyc e caches)
 RUN find /root/.local -name "*.pyc" -delete \
-    && find /root/.local -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+ && find /root/.local -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 
-EXPOSE $PORT
+EXPOSE ${PORT}
 
-CMD python -m uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1
+# HEALTHCHECK opcional (ajuste o endpoint conforme sua app)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
+
+# ENTRYPOINT / CMD (use gunicorn em produção se preferir)
+# Exemplo com gunicorn (recomendado para múltiplos workers):
+# CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "backend.app.main:app", "-w", "4", "-b", "0.0.0.0:8000"]
+CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000", "--loop", "uvloop"]
