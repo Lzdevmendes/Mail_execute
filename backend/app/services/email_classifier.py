@@ -195,30 +195,37 @@ class EmailClassifier:
             text_lower = text.lower()
 
             # Detectar palavras-chave improdutivas diretamente
-            unproductive_keywords = ['parabéns', 'felicitações', 'aniversário', 'natal', 'obrigado', 'agradeço', 'bom dia', 'boa tarde', 'feliz', 'abraço']
-            productive_keywords = ['problema', 'erro', 'ajuda', 'urgente', 'prazo', 'relatório', 'dados', 'projeto']
+            unproductive_keywords = [
+                'parabéns', 'felicitações', 'aniversário', 'natal', 'obrigado', 'agradeço',
+                'bom dia', 'boa tarde', 'boa noite', 'feliz', 'abraço', 'beijo', 'tudo bem',
+                'oi pessoal', 'olá', 'como vai', 'como está', 'cumprimentos', 'saudações',
+                'fim de semana', 'feriado', 'férias', 'festa', 'celebração', 'comemoração'
+            ]
+            productive_keywords = [
+                'problema', 'erro', 'ajuda', 'urgente', 'prazo', 'relatório', 'dados', 'projeto',
+                'reunião', 'reuniao', 'meeting', 'solicitação', 'pedido', 'informação', 'documento', 'arquivo',
+                'cancelada', 'cancelado', 'adiada', 'adiado', 'remarcada', 'remarcado'
+            ]
 
             unproductive_count = sum(1 for kw in unproductive_keywords if kw in text_lower)
             productive_count = sum(1 for kw in productive_keywords if kw in text_lower)
 
-            if unproductive_count > productive_count and unproductive_count > 0:
-                # Claramente improdutivo
-                return EmailCategory.UNPRODUCTIVE, min(0.9, confidence + 0.1)
+            # Priorizar palavras-chave sobre sentiment
+            if unproductive_count > 0:
+                # Se tem palavras improdutivas, é improdutivo
+                return EmailCategory.UNPRODUCTIVE, min(0.9, confidence + 0.15)
             elif productive_count > 0:
-                # Claramente produtivo
+                # Se tem palavras produtivas, é produtivo
                 return EmailCategory.PRODUCTIVE, min(0.9, confidence + 0.1)
-            elif sentiment in ['positive', 'pos'] and 'parabéns' in text_lower or 'feliz' in text_lower:
-                # Positivo com palavras de celebração = improdutivo
-                return EmailCategory.UNPRODUCTIVE, min(0.8, confidence)
+            elif sentiment in ['positive', 'pos']:
+                # Positivo sem palavras específicas = mais provável ser improdutivo
+                return EmailCategory.UNPRODUCTIVE, min(0.75, confidence)
             elif sentiment in ['negative', 'neg']:
                 # Negativo geralmente indica problemas = produtivo
                 return EmailCategory.PRODUCTIVE, min(0.8, confidence)
             else:
-                # Default baseado em sentiment mais conservador
-                if sentiment in ['positive', 'pos']:
-                    return EmailCategory.UNPRODUCTIVE, min(0.6, confidence)
-                else:
-                    return EmailCategory.PRODUCTIVE, min(0.6, confidence)
+                # Neutral - default produtivo com baixa confiança
+                return EmailCategory.PRODUCTIVE, min(0.55, confidence)
 
         except Exception as e:
             logger.error(f"AI classification failed: {str(e)}")
